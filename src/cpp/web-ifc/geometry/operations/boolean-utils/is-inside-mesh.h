@@ -84,7 +84,6 @@ namespace fuzzybools
         result.loc = MeshLocation::BOUNDARY;
         result.normal = glm::dvec3(0);
 
-        double dirLength = dir.length();
 
         bool hasResult = bvh.IntersectRay(pt, dir, [&](uint32_t i) -> bool
                                           {
@@ -107,7 +106,6 @@ namespace fuzzybools
                 if (hasIntersection)
                 {
                     Vec otherNormal = computeNormal(a, b, c);  // normalised
-                    double d = glm::dot(otherNormal, dir);
                     double dn = glm::dot(otherNormal, normal);
                     if (std::fabs(d_plane) < _TOLERANCE_PLANE_DEVIATION)
                     {

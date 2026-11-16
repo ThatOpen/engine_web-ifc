@@ -16,7 +16,7 @@ namespace bimGeometry {
 
         Geometry geom = SweepFunction(scaling, closed, std::vector<std::vector<glm::dvec3>>{profilePoints}, directrix, initialDirectrixNormal, rotate90, optimize);
 
-        for (int r = 0; r < geom.numFaces; r++)
+        for (uint32_t r = 0; r < geom.numFaces; r++)
         {
             bimGeometry::Face f = geom.GetFace(r);
             buffers.AddTri(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));

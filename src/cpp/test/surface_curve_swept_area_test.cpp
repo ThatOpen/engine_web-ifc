@@ -121,7 +121,7 @@ TEST(SurfaceCurveSweptAreaSolidOmittedPositionHasNoTokenErrors)
 
     for (const auto &error : sink->errors)
     {
-        ASSERT_EQ(error.find("unexpected token type") == std::string::npos, true);
+        ASSERT_EQ((error.find("unexpected token type") == std::string::npos), true);
     }
     ASSERT_EQ(HasGeometry(mesh), true);
 }

@@ -6,8 +6,6 @@
 #include "utils.h"
 #include "plane.h"
 
-#pragma once
-
 namespace bimGeometry
 {
     bool Plane::IsEqualTo(const Vec &n, double d)

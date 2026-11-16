@@ -20,7 +20,7 @@
 
 namespace fuzzybools
 {
-	static void writeFile(std::wstring filename, std::string data)
+	static void writeFile([[maybe_unused]] std::wstring filename, [[maybe_unused]] std::string data)
 	{
 #ifdef _MSC_VER
         std::wstring fullPath = L"debug_output/" + filename;

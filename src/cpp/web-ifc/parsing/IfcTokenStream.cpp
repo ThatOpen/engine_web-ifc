@@ -79,7 +79,7 @@ bool IfcTokenStream::SetTokenSource(std::istream &requestData)
     
   void IfcTokenStream::MoveTo(const size_t pos)
   {
-     for (size_t i=_chunks.size()-1; i >=0; i--)
+     for (size_t i = _chunks.size(); i-- > 0;)
       {
         if (_chunks[i].GetTokenRef() <= pos) 
         {

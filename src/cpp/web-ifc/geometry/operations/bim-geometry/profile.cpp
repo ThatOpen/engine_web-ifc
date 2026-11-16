@@ -55,7 +55,7 @@ namespace bimGeometry
         }
 
 
-        for (int r = 0; r <  profile.points.size(); r++)
+        for (size_t r = 0; r <  profile.points.size(); r++)
         {
             buffers.AddPoint( profile.points[r]);
         }

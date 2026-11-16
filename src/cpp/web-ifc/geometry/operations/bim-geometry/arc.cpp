@@ -34,7 +34,7 @@ namespace bimGeometry
         points.clear();
 
         std::vector<glm::dvec3> points = (bimGeometry::GetEllipseCurve(radiusX, radiusY, numSegments, placement, startRad, endRad, swap, normalToCenterEnding)).points;
-        for (int r = 0; r < points.size(); r++)
+        for (size_t r = 0; r < points.size(); r++)
         {
             buffers.AddPoint(points[r]);
         }

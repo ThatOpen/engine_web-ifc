@@ -72,7 +72,7 @@ TEST(GetSchemaTestIFC4)
 
     auto loader = CreateLoaderFromContent(ifc4Content);
     auto schema = GetSchemaEnumFromLoader(loader);
-    ASSERT_EQ(schema == IFC4, true);
+    ASSERT_EQ((schema == IFC4), true);
 }
 
 TEST(GetSchemaTestIFC2X3)
@@ -89,7 +89,7 @@ TEST(GetSchemaTestIFC2X3)
 
     auto loader = CreateLoaderFromContent(ifc2x3Content);
     auto schema = GetSchemaEnumFromLoader(loader);
-    ASSERT_EQ(schema == IFC2X3, true);
+    ASSERT_EQ((schema == IFC2X3), true);
 }
 
 TEST(GetSchemaTestIFC4X3)
@@ -106,7 +106,7 @@ TEST(GetSchemaTestIFC4X3)
 
     auto loader = CreateLoaderFromContent(ifc4x3Content);
     auto schema = GetSchemaEnumFromLoader(loader);
-    ASSERT_EQ(schema == IFC4X3, true);
+    ASSERT_EQ((schema == IFC4X3), true);
 }
 
 TEST(GetSchemaTestNoFileSchema)
@@ -122,7 +122,7 @@ TEST(GetSchemaTestNoFileSchema)
 
     auto loader = CreateLoaderFromContent(noFileSchemaContent);
     auto schema = GetSchemaEnumFromLoader(loader);
-    ASSERT_EQ(schema == IFC2X3, true);
+    ASSERT_EQ((schema == IFC2X3), true);
 }
 
 } // namespace

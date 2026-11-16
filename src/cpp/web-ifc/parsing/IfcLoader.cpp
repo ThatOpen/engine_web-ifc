@@ -382,7 +382,7 @@ IFC_SCHEMA IfcLoader::GetSchema() const
    double IfcLoader::GetDoubleArgument() const
    { 
       std::string_view str = GetStringArgument();
-      double number_value;
+      double number_value = 0;
       fast_float::from_chars(str.data(), str.data() + str.size(), number_value);
       return number_value;
    }

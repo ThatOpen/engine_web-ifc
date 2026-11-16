@@ -32,13 +32,12 @@ namespace fuzzybools
             Vec &hitPosition,
             double &t,
             double &d_plane,
-            bool infiniteLength = false)
+            [[maybe_unused]] bool infiniteLength = false)
         {
                 /*
                         Compute the direction of the ray from origin to end.
                 */
                 Vec dir = end - origin;
-                Vec dirNormalised = glm::normalize(dir);
 
                 /*
                         Compute the normal to the plane defined by v0, v1 and v2.
@@ -48,8 +47,6 @@ namespace fuzzybools
                 Vec v0v2 = v2 - v0;
                 Vec n = glm::cross(v0v1, v0v2);
 
-                double nLength = n.length();
-                double dirLength = dir.length();
 
                 /*
                         Step 0
@@ -117,13 +114,11 @@ namespace fuzzybools
                 */
 
                 Vec c;
-                double cLength = 0.0;
 
                 // edge 0
                 Vec edge0 = v1 - v0;
                 Vec v0p = p - v0;
                 c = glm::cross(edge0, v0p);
-                cLength = c.length();
                 double valdot = glm::dot(n, c);
                 //      if (glm::dot(n, c) < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * nLength * cLength) return false;
                 if (valdot < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER)
@@ -133,7 +128,6 @@ namespace fuzzybools
                 Vec edge1 = v2 - v1;
                 Vec v1p = p - v1;
                 c = glm::cross(edge1, v1p);
-                cLength = c.length();
                 valdot = glm::dot(n, c);
                 //      if (glm::dot(n, c) < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * nLength * cLength) return false;
                 if (valdot < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER)
@@ -143,7 +137,6 @@ namespace fuzzybools
                 Vec edge2 = v0 - v2;
                 Vec v2p = p - v2;
                 c = glm::cross(edge2, v2p);
-                cLength = c.length();
                 valdot = glm::dot(n, c);
                 //      if (glm::dot(n, c) < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * nLength * cLength) return false;
                 if (valdot < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER)

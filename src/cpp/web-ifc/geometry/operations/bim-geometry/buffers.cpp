@@ -3,8 +3,6 @@
 #include <glm/glm.hpp>
 #include "buffers.h"
 
-#pragma once
-
 namespace bimGeometry {
     void Buffers::AddPoint(glm::dvec3 pt)
     {

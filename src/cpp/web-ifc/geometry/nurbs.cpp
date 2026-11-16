@@ -356,7 +356,6 @@ namespace webifc::geometry{
 		std::vector<uint32_t> result;
 		if(uv_points.empty()) return result;
 		auto const num_points {uv_points.size()};
-		auto const num_edges {num_points};
 		CDT::Triangulation<double> triangulator{};
 		std::vector<CDT::V2d<double>> points;
 		points.resize(num_points);
@@ -368,7 +367,6 @@ namespace webifc::geometry{
 		{
 			triangulator.insertVertices(points);
 			triangulator.eraseSuperTriangle();
-			auto const num_indices{triangulator.triangles.size() * 3};
 			result.reserve(triangulator.triangles.size() * 3);
 			for(auto const& triangle : triangulator.triangles){
 				auto const & vertice0_id{triangle.vertices[0]};

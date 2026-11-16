@@ -328,7 +328,7 @@ namespace webifc::parsing {
                 std::copy(utf8.begin(), utf8.end(), std::back_inserter(result));
             }
 
-            const char16_t checkRomanEncoding(char16_t input) const
+            char16_t checkRomanEncoding(char16_t input) const
             {
                 if (input < 0x80 || input > 0xFF) return input;
                 switch (input)

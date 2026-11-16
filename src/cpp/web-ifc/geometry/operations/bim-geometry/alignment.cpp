@@ -29,7 +29,7 @@ namespace bimGeometry
             points.push_back(glm::dvec3(points3D[i].x, points3D[i].y, points3D[i].z));
         }
 
-        for (int r = 0; r < points.size(); r++)
+        for (size_t r = 0; r < points.size(); r++)
         {
             buffers.AddPoint(points[r]);
         }

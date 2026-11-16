@@ -536,7 +536,7 @@ namespace webifc::io
         return obj.str();
     }
 
-    Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, glm::dvec2 size, glm::dvec2 offset)
+    Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, [[maybe_unused]] glm::dvec2 size, [[maybe_unused]] glm::dvec2 offset)
     {
         std::vector<glm::dvec2> retval;
 

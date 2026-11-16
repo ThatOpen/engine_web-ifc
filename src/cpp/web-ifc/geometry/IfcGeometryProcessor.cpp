@@ -46,7 +46,7 @@ namespace webifc::geometry
     extern double g_morphUnitToMetre;   // defined by hook.py's block, just below
     int g_morphFallbacks = 0;           // hook calls that failed (MorphBool returned -2/-3)
 
-    static size_t MorphNakedEdges(const IfcGeometry &g)
+    [[maybe_unused]] static size_t MorphNakedEdges(const IfcGeometry &g)
     {
         const double cell = 1e-4 / (g_morphUnitToMetre > 0 ? g_morphUnitToMetre : 1.0);
         std::map<std::tuple<int64_t, int64_t, int64_t>, uint32_t> ids;
@@ -1109,8 +1109,8 @@ namespace webifc::geometry
             case schema::IFCSHAPEREPRESENTATION:
             {
                 // IFCTOPOLOGYREPRESENTATION and IFCSHAPEREPRESENTATION are identical in attributes layout
-                _loader.MoveToArgumentOffset(expressID, 1);
-                auto type = _loader.GetStringArgument();
+                // _loader.MoveToArgumentOffset(expressID, 1);
+                // _loader.GetStringArgument();
 
                 _loader.MoveToArgumentOffset(expressID, 3);
                 auto repItems = _loader.GetSetArgument();
@@ -1465,7 +1465,6 @@ namespace webifc::geometry
                 const bool tapered = _loader.GetLineType(expressID) == schema::IFCEXTRUDEDAREASOLIDTAPERED;
                 const uint32_t endProfileID = tapered ? _loader.GetRefArgument() : 0;
 
-                auto lineProfileType = _loader.GetLineType(profileID);
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
                 if (!profile.isComposite)
                 {
@@ -1753,7 +1752,6 @@ namespace webifc::geometry
             case schema::IFCLINE:
             case schema::IFCSEGMENTEDREFERENCECURVE:
             {
-                auto lineProfileType = _loader.GetLineType(expressID);
                 IfcCurve curve = _geometryLoader.GetCurve(expressID, 3, false);
 
                 if (curve.points.size() > 0)
@@ -1845,8 +1843,8 @@ namespace webifc::geometry
             _loader.MoveToArgumentOffset(expressID, 5);
             auto closedV = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 6);
-            auto selfIntersect = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 6);
+            // auto selfIntersect = _loader.GetStringArgument();
 
             surface.BSplineSurface.Active = true;
             surface.BSplineSurface.UDegree = Udegree;
@@ -1887,17 +1885,17 @@ namespace webifc::geometry
                 ctrolPts.push_back(list);
             }
 
-            _loader.MoveToArgumentOffset(expressID, 3);
-            auto curveType = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 3);
+            // auto curveType = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 4);
-            auto closedU = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 4);
+            // auto closedU = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 5);
-            auto closedV = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 5);
+            // auto closedV = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 6);
-            auto selfIntersect = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 6);
+            // auto selfIntersect = _loader.GetStringArgument();
 
             _loader.MoveToArgumentOffset(expressID, 7);
             auto knotSetU = _loader.GetSetArgument();
@@ -1974,17 +1972,17 @@ namespace webifc::geometry
                 ctrolPts.push_back(list);
             }
 
-            _loader.MoveToArgumentOffset(expressID, 3);
-            auto curveType = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 3);
+            // auto curveType = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 4);
-            auto closedU = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 4);
+            // auto closedU = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 5);
-            auto closedV = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 5);
+            // auto closedV = _loader.GetStringArgument();
 
-            _loader.MoveToArgumentOffset(expressID, 6);
-            auto selfIntersect = _loader.GetStringArgument();
+            // _loader.MoveToArgumentOffset(expressID, 6);
+            // auto selfIntersect = _loader.GetStringArgument();
 
             _loader.MoveToArgumentOffset(expressID, 7);
             auto knotSetU = _loader.GetSetArgument();
@@ -3036,7 +3034,7 @@ namespace webifc::geometry
     }
 
     IfcGeometryProcessor::IfcGeometryProcessor(const IfcGeometrySettings &settings, std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry, glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube)
-        : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _transformation(transformation), _loader(loader), _cache(cache::IfcCache(loader)), _boolEngine(boolEngine), _schemaManager(schemaManager), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube), _geometryLoader(geometry::IfcGeometryLoader(loader,_cache,settings._circleSegments))
+        : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _transformation(transformation), _loader(loader), _cache(cache::IfcCache(loader)), _boolEngine(boolEngine), _schemaManager(schemaManager), _geometryLoader(geometry::IfcGeometryLoader(loader,_cache,settings._circleSegments)), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube)
     {
     }
 
