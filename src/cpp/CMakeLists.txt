@@ -57,7 +57,7 @@ FetchContent_Declare(earcut GIT_REPOSITORY "https://github.com/mapbox/earcut.hpp
 FetchContent_MakeAvailable(earcut)
 
 Message("Downloading CDT")
-FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "b4413ee44affb489099ed4d6ec65e94788cb6708" SOURCE_SUBDIR "../")
+FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "d66c2024ea3d7f06dca22bcbea93a8d5211ef5fb" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(cdt)
 
 Message("Downloading spdlog")
