@@ -27,6 +27,7 @@
 #include "../web-ifc/geometry/operations/bim-geometry/utils.h"
 #include "../web-ifc/geometry/operations/bim-geometry/boolean.h"
 #include "../web-ifc/geometry/operations/bim-geometry/profile.h"
+#include "../web-ifc/geometry/operations/section.h"
 
 namespace webifc::parsing
 {
@@ -1211,6 +1212,29 @@ bimGeometry::Profile CreateProfile()
     return bimGeometry::Profile();
 }
 
+// Section of one mesh by a plane (see section.h). positions: x, y, z per vertex (any array of numbers);
+// indices: 3 per triangle; plane: [px, py, pz, nx, ny, nz]. Returns arrays owned by JS.
+emscripten::val SectionMesh(emscripten::val positions, emscripten::val indices, emscripten::val plane, double weld, double closeGap)
+{
+    const std::vector<double> pos = emscripten::convertJSArrayToNumberVector<double>(positions);
+    const std::vector<uint32_t> idx = emscripten::convertJSArrayToNumberVector<uint32_t>(indices);
+    const std::vector<double> pl = emscripten::convertJSArrayToNumberVector<double>(plane);
+    emscripten::val o = emscripten::val::object();
+    if (pl.size() < 6)
+        return o;
+    const webifc::geometry::SectionResult r = webifc::geometry::SectionMesh(pos, idx, glm::dvec3(pl[0], pl[1], pl[2]), glm::dvec3(pl[3], pl[4], pl[5]), weld, closeGap);
+    static const emscripten::val Float64Array = emscripten::val::global("Float64Array");
+    static const emscripten::val Uint32Array = emscripten::val::global("Uint32Array");
+    o.set("capPositions", Float64Array.new_(emscripten::typed_memory_view(r.capPositions.size(), r.capPositions.data())));
+    o.set("capIndices", Uint32Array.new_(emscripten::typed_memory_view(r.capIndices.size(), r.capIndices.data())));
+    o.set("lines", Float64Array.new_(emscripten::typed_memory_view(r.lines.size(), r.lines.data())));
+    o.set("closedLoops", r.closedLoops);
+    o.set("closedByGap", r.closedByGap);
+    o.set("openChains", r.openChains);
+    o.set("earcutFailures", r.earcutFailures);
+    return o;
+}
+
 EMSCRIPTEN_BINDINGS(my_module)
 {
 
@@ -1459,4 +1483,5 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("DecodeText", &DecodeText);
     emscripten::function("EncodeText", &EncodeText);
     emscripten::function("GenerateGuid", &GenerateGuid);
+    emscripten::function("SectionMesh", &SectionMesh);
 }

@@ -20,7 +20,8 @@ import {
   IFCIDENTIFIER,
 } from "../../dist/web-ifc-api";
 import { IfcThree } from "./web-ifc-three";
-import { Init3DView, InitBasicScene, ClearScene, scene } from "./web-ifc-scene";
+import { Init3DView, InitBasicScene, ClearScene, scene, camera, controls, renderer } from "./web-ifc-scene";
+import { SectionTool } from "./web-ifc-section";
 import * as Monaco from "monaco-editor";
 import * as ts_decl from "./ts_src";
 import * as ts from "typescript";
@@ -31,6 +32,7 @@ ifcAPI.SetWasmPath("./");
 let ifcThree = new IfcThree(ifcAPI);
 
 let timeout = undefined;
+let sectionTool: SectionTool | undefined = undefined;
 
 function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor) {
   let code = monacoEditor.getValue();
@@ -108,6 +110,13 @@ if (typeof window != "undefined") {
     const gitRevEl = document.getElementById("gitrev");
     if (gitRevEl) gitRevEl.textContent = ts_decl.git_rev;
     Init3DView();
+    sectionTool = new SectionTool(ifcAPI, ifcThree, scene, renderer, camera, controls);
+    const status = document.getElementById("cutStatus");
+    sectionTool.onStatus = (text) => { if (status) status.textContent = text; };
+    document.getElementById("cutSection").addEventListener("click", () => sectionTool.Section());
+    document.getElementById("cutRotate").addEventListener("click", () => sectionTool.Rotate());
+    document.getElementById("cutPlan").addEventListener("click", () => sectionTool.Plan());
+    document.getElementById("cutOff").addEventListener("click", () => sectionTool.Off());
   };
 }
 
@@ -122,6 +131,8 @@ async function runCode() {
 
   scene.clear();
   InitBasicScene();
+  ifcThree.ClearSectionElements();
+  sectionTool?.Reset();
 
   let code = window.localStorage.getItem("code");
   let compiled = ts.transpileModule(code, {
@@ -170,6 +181,8 @@ async function resetCode() {
 
 async function clearMem() {
   ClearScene();
+  ifcThree.ClearSectionElements();
+  sectionTool?.Reset();
   ifcAPI.Dispose();
   await ifcAPI.Init();
 }
@@ -228,6 +241,7 @@ async function LoadModel(data: Uint8Array) {
   const time = ms() - start;
   console.log(`Opening model took ${time} ms`);
   ifcThree.LoadAllGeometry(scene, modelID);
+  sectionTool?.Off();   // a new model: start uncut (its materials have no clipping plane yet)
 
   if (
     ifcAPI.GetModelSchema(modelID) == "IFC2X3" ||

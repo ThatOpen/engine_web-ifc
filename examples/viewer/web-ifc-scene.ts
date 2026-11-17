@@ -61,4 +61,4 @@ function AnimationLoop() {
   renderer.render(scene, camera);
 }
 
-export { scene, Init3DView };
+export { scene, camera, controls, renderer, Init3DView };
