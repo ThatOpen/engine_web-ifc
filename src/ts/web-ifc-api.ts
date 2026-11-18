@@ -188,6 +188,20 @@ export interface SweptDiskSolid {
   profileRadius: number;
 }
 
+/** An IfcSweptDiskSolid read without meshing it (see IfcAPI.GetSweptDiskAxes). */
+export interface SweptDiskAxis {
+  /** The IfcSweptDiskSolid item, as PlacedGeometry.geometryExpressID. */
+  geometryExpressID: number;
+  /** As PlacedGeometry.color. */
+  color: Color;
+  /** As PlacedGeometry.flatTransformation (column-major 4x4). */
+  flatTransformation: Float64Array;
+  /** The directrix the sweep follows, x y z per point, in the item's frame (as SweptDiskSolid.axis). */
+  points: Float64Array;
+  radius: number;
+  innerRadius: number;
+}
+
 export interface Profile {
   curve: Curve;
   holes: Array<Curve>;
@@ -1542,6 +1556,16 @@ export class IfcAPI {
   ) {
     if (!this.wasmModule.StreamBrepMeshes) throw new Error("web-ifc: this build has no brep engine");
     this.wasmModule.StreamBrepMeshes(modelID, expressIDs, meshCallback);
+  }
+
+  /**
+   * The swept disks of a product (e.g. reinforcing bars) without meshing them: per IfcSweptDiskSolid item,
+   * its placement and colour as StreamMeshes would give them, the directrix it is swept along (any curve:
+   * arcs and trims evaluated as for the mesh) and its radius. No tube is built and nothing stays cached.
+   * Other items of the product are not returned.
+   */
+  GetSweptDiskAxes(modelID: number, productID: number): SweptDiskAxis[] {
+    return this.wasmModule.GetSweptDiskAxes(modelID, productID);
   }
 
   /** Whether this build carries the brep geometry engine. */
