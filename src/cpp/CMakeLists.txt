@@ -236,6 +236,7 @@ if(NOT EMSCRIPTEN)
 		"./test/encoding_test.cpp"
 		"./test/get_schema_test.cpp"
 		"./test/issue65_material_test.cpp"
+		"./test/issue533_annotation_curve3d_test.cpp"
 		"./test/malformed_input_test.cpp"
 		"./test/surface_curve_swept_area_test.cpp"
 		"./test/touching_face_bounds_test.cpp"

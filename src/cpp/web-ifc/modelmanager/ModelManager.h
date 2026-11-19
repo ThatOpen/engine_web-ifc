@@ -34,6 +34,11 @@ namespace webifc::manager
         double TOLERANCE_SCALAR_EQUALITY = 1.0E-04;
         uint16_t PLANE_REFIT_ITERATIONS = 1;
         uint16_t BOOLEAN_UNION_THRESHOLD = 150;
+        // Export wireframe (curve/point) geometry of products that carry no solid
+        // geometry at all (e.g. IfcAnnotation Curve3D representations, IfcGrid,
+        // IfcGeometricCurveSet). Defaults to false so existing consumers keep
+        // receiving triangles only; set to true to also receive wireframes.
+        bool EXPORT_POLYLINES = false;
     };
 
     class ModelManager

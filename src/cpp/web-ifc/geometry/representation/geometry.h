@@ -236,6 +236,12 @@ namespace webifc::geometry {
 			}
 		};
 
+		// How the vertices of a placed geometry have to be drawn by the client:
+		// a triangle mesh (default), a polyline strip (wireframe representation items
+		// such as IfcPolyline, IfcIndexedPolyCurve, IfcCircle or IfcEdge) or a set of
+		// independent points (IfcCartesianPoint and IfcCartesianPointList items).
+		enum IfcGeomType : uint8_t { GEOM_TRIANGLES = 0, GEOM_LINE_STRIP = 1, GEOM_POINTS = 2 };
+
 		struct IfcPlacedGeometry
 		{
 			glm::dvec4 color;
@@ -243,6 +249,12 @@ namespace webifc::geometry {
 			// IFC style; color is then a neutral default and must not be
 			// interpreted as a material definition
 			bool hasColor = false;
+			// GEOM_TRIANGLES, GEOM_LINE_STRIP or GEOM_POINTS. Non-triangle geometry is
+			// only produced for products whose representation contains no solid or face
+			// geometry (e.g. IfcAnnotation Curve3D representations, grids, curve sets),
+			// so existing triangle-only consumers keep receiving exactly the same data
+			// for regular building elements.
+			uint8_t geomType = GEOM_TRIANGLES;
 			glm::dmat4 transformation;
 			std::array<double, 16> flatTransformation;
 			uint32_t geometryExpressID;
