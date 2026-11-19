@@ -643,7 +643,7 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
         if (!IsBinaryValue(value)) return false;
         std::string text = value.as<std::string>();
         std::transform(text.begin(), text.end(), text.begin(), webifc::parsing::CanonicalBinaryDigit);
-        loader->Push<uint16_t>(static_cast<uint16_t>(text.size()));
+        loader->Push<webifc::parsing::BinaryLength>(static_cast<webifc::parsing::BinaryLength>(text.size()));
         loader->Push((void*)text.data(), text.size());
         break;
     }
@@ -846,7 +846,7 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
         return false;
     if (!ValidateBinaryArguments(parameters))
     {
-        spdlog::error("Invalid STEP binary value: expected a hex string with valid padding, at most 65535 characters");
+        spdlog::error("Invalid STEP binary value: expected a hex string with valid padding");
         return false;
     }
     if (!ValidateIntegerArguments(parameters))
@@ -884,7 +884,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
         return false;
     if (!ValidateBinaryArguments(parameters))
     {
-        spdlog::error("Invalid STEP binary value: expected a hex string with valid padding, at most 65535 characters");
+        spdlog::error("Invalid STEP binary value: expected a hex string with valid padding");
         return false;
     }
     if (!ValidateIntegerArguments(parameters))
@@ -924,7 +924,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     switch (t)
     {
     case webifc::parsing::IfcTokenType::BINARY:
-        return emscripten::val(std::string(loader->GetStringArgument()));
+        return emscripten::val(std::string(loader->GetBinaryArgument()));
     case webifc::parsing::IfcTokenType::STRING:
     {
         return emscripten::val(loader->GetDecodedStringArgument());

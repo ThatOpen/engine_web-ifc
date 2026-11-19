@@ -77,7 +77,7 @@ for (const callback of [false, true]) {
     const open = data => callback
       ? api.OpenModelFromCallback((offset, size) => data.subarray(offset, offset + size), { TAPE_SIZE: 1024 })
       : api.OpenModel(data, { TAPE_SIZE: 1024 });
-    const invalid = ['""', '"4ABC"', '"0AG"', '"1"', '"3F"', '"2C"', '"0a b"', '"' + "0" + "F".repeat(65535) + '"'];
+    const invalid = ['""', '"4ABC"', '"0AG"', '"1"', '"3F"', '"2C"', '"0a b"'];
     const inputs = invalid.map(binaryModel);
     // EOF inside a literal, both before any tokens and after valid entities.
     inputs.push(new TextEncoder().encode('"0FF'));
@@ -114,7 +114,7 @@ for (const [shape, args] of Object.entries(binaryArguments)) {
       const original = api.GetRawLineData(model, 9000);
       const originalIDs = lineIDs(api, model);
       const saved = api.SaveModel(model);
-      for (const invalid of ["", "4ABC", "0AG", "1", "3F", "2C", "0F\"", "0" + "F".repeat(65535), 42, null, undefined]) {
+      for (const invalid of ["", "4ABC", "0AG", "1", "3F", "2C", "0F\"", 42, null, undefined]) {
         assert.equal(api.wasmModule.WriteLine(model, 9000, w.IFCPIXELTEXTURE, args(invalid)), false);
         assert.deepEqual(api.GetRawLineData(model, 9000), original);
         assert.deepEqual(api.SaveModel(model), saved);
@@ -143,6 +143,23 @@ test("invalid binary header write leaves the model unchanged", async () => {
     assert.equal(api.wasmModule.WriteHeaderLine(model, w.FILE_DESCRIPTION, binaryArguments.nested("4ABC")), false);
     assert.deepEqual(api.SaveModel(model), saved);
   } finally { api.CloseModel(model); }
+});
+
+// Literals longer than 65535 characters are valid STEP and must load (e.g. embedded textures).
+test("binary literal above the former 65535-character limit loads and round-trips", async () => {
+  const api = new w.IfcAPI();
+  await api.Init();
+  const value = "0" + "F".repeat(65536);
+  let model = api.OpenModel(binaryModel(`"${value}"`));
+  try {
+    assert.notEqual(model, -1);
+    assert.equal(api.GetLine(model, 9000).Pixel[0].value, value);
+    const saved = api.SaveModel(model);
+    api.CloseModel(model);
+    model = api.OpenModel(saved);
+    assert.notEqual(model, -1);
+    assert.equal(api.GetLine(model, 9000).Pixel[0].value, value);
+  } finally { if (model !== -1) api.CloseModel(model); }
 });
 
 test("binary length boundary and chunk eviction preserve the token tape", async () => {

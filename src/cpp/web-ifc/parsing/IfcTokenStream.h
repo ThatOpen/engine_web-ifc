@@ -30,6 +30,9 @@ namespace webifc::parsing
     INTEGER,
     BINARY
   };
+
+  // Length prefix of a BINARY token. Embedded STEP binary literals (e.g. textures) can exceed 65535 characters.
+  using BinaryLength = uint32_t;
   
   
   class IfcTokenStream 
@@ -55,6 +58,9 @@ namespace webifc::parsing
         }
         void Push(void *v, const size_t size);
         std::string_view ReadString();
+        std::string_view ReadBinaryString();
+        // Length prefix of a variable-length token: 32-bit for BINARY, 16-bit for all other types.
+        inline size_t ReadLength(IfcTokenType t) { return t == IfcTokenType::BINARY ? Read<BinaryLength>() : Read<uint16_t>(); }
         void MoveTo(const size_t pos);
         size_t GetReadOffset();
         size_t GetTotalSize();

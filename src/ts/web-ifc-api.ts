@@ -60,7 +60,7 @@ export const SET_END = 8;
 export const LINE_END = 9;
 export const INTEGER = 10;
 /** STEP binary literal contents, including the unused-bit prefix (0-3).
- * Up to 65535 characters; lowercase hex is accepted and saved as uppercase.
+ * Up to 2^32-1 characters; lowercase hex is accepted and saved as uppercase.
  */
 export const BINARY = 11;
 

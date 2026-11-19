@@ -111,7 +111,7 @@ namespace webifc::parsing
             const char digit = _fileStream->Get();
             if (BinaryHexDigit(digit) < 0 || temp.size() == MAX_BINARY_LENGTH)
             {
-              spdlog::error("Invalid STEP binary digit or value exceeds 65535 characters");
+              spdlog::error("Invalid STEP binary digit or value is too long");
               _parseFailed = true;
               return;
             }
@@ -125,7 +125,7 @@ namespace webifc::parsing
             return;
           }
           Push<uint8_t>(IfcTokenType::BINARY);
-          Push<uint16_t>(temp.size());
+          Push<BinaryLength>(static_cast<BinaryLength>(temp.size()));
           Push(temp.data(), temp.size());
         }
         else if (c == '#')
