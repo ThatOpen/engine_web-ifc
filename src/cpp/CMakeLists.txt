@@ -234,6 +234,7 @@ if(NOT EMSCRIPTEN)
 		"./test/main.cpp"
 		"./test/io_helpers.cpp"
 		"./test/encoding_test.cpp"
+		"./test/binary_literal_test.cpp"
 		"./test/get_schema_test.cpp"
 		"./test/issue65_material_test.cpp"
 		"./test/malformed_input_test.cpp"

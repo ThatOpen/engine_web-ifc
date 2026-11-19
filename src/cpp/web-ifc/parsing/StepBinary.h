@@ -10,8 +10,8 @@
 
 namespace webifc::parsing
 {
-    // BINARY currently shares the token tape's uint16_t string length field.
-    inline constexpr size_t MAX_BINARY_LENGTH = std::numeric_limits<uint16_t>::max();
+    // BINARY tokens carry a 32-bit length prefix (BinaryLength).
+    inline constexpr size_t MAX_BINARY_LENGTH = std::numeric_limits<uint32_t>::max();
 
     inline int BinaryHexDigit(char digit)
     {
