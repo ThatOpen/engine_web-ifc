@@ -3207,6 +3207,48 @@ bool hasWarpedFacet(const G& g) {
   return false;
 }
 
+// Openings: host -> opening elements, from IfcRelVoidsElement, then handed down the aggregation
+// (IfcRelAggregates): the parts a host is made of (wall layers as IfcBuildingElementPart) are cut by the
+// host's openings, as web-ifc does (IfcCache::PopulateRelAggregatesMap). A part keeps its own openings
+// and adds its parent's, until nothing changes: nested aggregates come in any order.
+std::unordered_map<uint32_t, std::vector<uint32_t>> openingsByHost(Model& model) {
+  std::unordered_map<uint32_t, std::vector<uint32_t>> voidsOf;
+  for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELVOIDSELEMENT)) {
+    const Entity* rel = line(model, rid);
+    const uint32_t host = asHandle(get(rel, "RelatingBuildingElement"));
+    const uint32_t hole = asHandle(get(rel, "RelatedOpeningElement"));
+    if (host && hole) voidsOf[host].push_back(hole);
+  }
+  if (voidsOf.empty()) return voidsOf;
+  std::vector<std::pair<uint32_t, std::vector<uint32_t>>> parts;
+  for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELAGGREGATES)) {
+    const Entity* rel = line(model, rid);
+    const uint32_t whole = asHandle(get(rel, "RelatingObject"));
+    if (!whole) continue;
+    std::vector<uint32_t> members;
+    for (const Value& v : itemsOf(get(rel, "RelatedObjects")))
+      if (const uint32_t m = asHandle(v)) members.push_back(m);
+    if (!members.empty()) parts.emplace_back(whole, std::move(members));
+  }
+  for (bool changed = true; changed;) {
+    changed = false;
+    for (const auto& [whole, members] : parts) {
+      auto found = voidsOf.find(whole);
+      if (found == voidsOf.end() || found->second.empty()) continue;
+      const std::vector<uint32_t> holes = found->second;  // copied: inserting below may rehash
+      for (uint32_t m : members) {
+        std::vector<uint32_t>& own = voidsOf[m];
+        for (uint32_t h : holes)
+          if (std::find(own.begin(), own.end(), h) == own.end()) {
+            own.push_back(h);
+            changed = true;
+          }
+      }
+    }
+  }
+  return voidsOf;
+}
+
 }  // namespace
 
 PassB runB(Model& model, webifc::geometry::IfcGeometryProcessor& gp, const std::vector<uint32_t>& products,
@@ -3234,15 +3276,8 @@ PassB runB(Model& model, webifc::geometry::IfcGeometryProcessor& gp, const std::
   pass.lengthScale = scale;
   pass.angleScale = angle.scale;
 
-  // Openings: host -> opening elements.
-  std::unordered_map<uint32_t, std::vector<uint32_t>> voidsOf;
-  for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELVOIDSELEMENT)) {
-    const Entity* rel = line(model, rid);
-    const uint32_t host = asHandle(get(rel, "RelatingBuildingElement"));
-    const uint32_t hole = asHandle(get(rel, "RelatedOpeningElement"));
-    if (!host || !hole) continue;
-    voidsOf[host].push_back(hole);
-  }
+  // Openings: host -> opening elements, handed down to the host's parts.
+  std::unordered_map<uint32_t, std::vector<uint32_t>> voidsOf = openingsByHost(model);
   pass.setupMs = ms(t0);
 
   auto openingsFor = [&](uint32_t hostID) {
@@ -3610,12 +3645,7 @@ struct BrepEngine::Impl {
     const LengthScale unit = unitLengthFactor(model);
     setWeldTolerance(WELD_METRES / unit.scale);
     ctx = MakeSettings{readPlaneAngleScale(model).scale};
-    for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELVOIDSELEMENT)) {
-      const Entity* rel = line(model, rid);
-      const uint32_t host = asHandle(get(rel, "RelatingBuildingElement"));
-      const uint32_t hole = asHandle(get(rel, "RelatedOpeningElement"));
-      if (host && hole) voidsOf[host].push_back(hole);
-    }
+    voidsOf = openingsByHost(model);
   }
 
   std::vector<Opening> openingsFor(uint32_t hostID) {
