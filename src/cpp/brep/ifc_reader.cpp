@@ -2503,7 +2503,7 @@ Bounded boundedHalfSpaceTool(Model& api, const Value& ref, const Placement4x4& i
       all = inside(local[0], local[1]) || nearEdge(local[0], local[1]);
     }
     // (Every corner inside a boundary that turns back on itself is not the whole subject inside it: a notch of the boundary may go into
-    // it between two corners. rac_advanced's walls over a plinth, cut by the half space less a strip 15 mm deep: the strip went too.)
+    // it between two corners. Walls over a plinth, cut by the half space less a strip 15 mm deep: the strip went too.)
     if (all) {
       double lo[2] = {std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()}, hi[2] = {-lo[0], -lo[1]};
       for (int32_t v = 0; v < subject.cornerTally(); v++) {
