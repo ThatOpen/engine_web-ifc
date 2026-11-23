@@ -3368,9 +3368,9 @@ npm-run-path@^4.0.1:
     path-key "^3.0.0"
 
 object-inspect@^1.13.3, object-inspect@^1.13.4:
-  version "1.13.4"
-  resolved "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz"
-  integrity sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.14.0.tgz#8d373f7293f9d0ba656de41bdb7a55992255af46"
+  integrity sha512-IVgHNlp/jwQX271+Xzoq9LZNTWXxZK+cEOrGBOBxXNbn7fapnZ+Ts6TVMgNOuAezwG2wdtnMX97tTPK6VEnuOQ==
 
 on-finished@^2.3.0, on-finished@~2.4.1:
   version "2.4.2"
