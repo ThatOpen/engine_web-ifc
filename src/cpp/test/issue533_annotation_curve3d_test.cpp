@@ -30,7 +30,7 @@ namespace {
 // Reproduction for https://github.com/ThatOpen/engine_web-ifc/issues/533:
 // an IFC4X3 model where 3D annotation geometry is stored as an
 // IfcShapeRepresentation('Body', 'Curve3D') holding an IfcIndexedPolyCurve
-// over an IfcCartesianPointList3D (the Bentley/infrastructure export style).
+// over an IfcCartesianPointList3D (a common infrastructure export style).
 const char *const ISSUE533_FIXTURE = "/annotation-curve3d/ifc4x3-annotation-curve3d.ifc";
 
 std::string ReadFixture(const char *relativePath)

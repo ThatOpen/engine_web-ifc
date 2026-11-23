@@ -61,7 +61,7 @@ namespace webifc::parsing
           temp.clear();
           // apparently I dont fully understand strings in IFC yet
           // this example from uptown shows that escaping is not used: 'Type G5 - 800kg/m\X2\00B2\X0\';
-          // this example from revit shows that double quotes are used as one quote: 'RPC Tree - Deciduous:Scarlet Oak - 42'':946835'
+          // this example from a real model shows that double quotes are used as one quote: 'RPC Tree - Deciduous:Scarlet Oak - 42'':946835'
           // turns out this is just part of ISO 10303-21, thanks ottosson!
           while (true)
           {

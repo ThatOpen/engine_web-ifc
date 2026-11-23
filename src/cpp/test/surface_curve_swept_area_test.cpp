@@ -52,7 +52,7 @@ bool HasGeometry(const webifc::geometry::IfcComposedMesh &mesh)
                        { return HasGeometry(child); });
 }
 
-// Element #32 of the Revit slab-edge pattern: IfcSurfaceCurveSweptAreaSolid
+// Element #32 of the slab-edge pattern: IfcSurfaceCurveSweptAreaSolid
 // with an omitted (OPTIONAL) Position attribute, i.e. "$" in the second slot.
 const char *const SURFACE_CURVE_OMITTED_POSITION_IFC = R"IFC(ISO-10303-21;
 HEADER;
@@ -126,7 +126,7 @@ TEST(SurfaceCurveSweptAreaSolidOmittedPositionHasNoTokenErrors)
     ASSERT_EQ(HasGeometry(mesh), true);
 }
 
-// Revit slab-edge reproduction from https://github.com/ThatOpen/engine_web-ifc/issues/2338.
+// Slab-edge reproduction from https://github.com/ThatOpen/engine_web-ifc/issues/2338.
 // Three IfcBuildingElementProxy products, all sweeping a 0.2 x 1.0 section along a 30 degree
 // arc of radius 10 on an IfcSurfaceOfLinearExtrusion extruded along -Z:
 //   #32 counter-clockwise directrix and SweptCurve,

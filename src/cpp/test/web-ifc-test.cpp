@@ -471,7 +471,6 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/540.ifc");
     std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1092_A.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Sample3_ArchiCAD25.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/384.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Spacewell_Wall.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1450.ifc");
