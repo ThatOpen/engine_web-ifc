@@ -71,6 +71,9 @@ namespace webifc::geometry
     // `SkipVoids` leaves an element's openings to that engine as well.
     // The value is the item's first point, for COORDINATE_TO_ORIGIN when it is the first geometry met.
     void SetSkippedItems(const std::unordered_map<uint32_t, glm::dvec3> *items, bool skipVoids);
+    // The directrix of an IfcSweptDiskSolid as the sweep uses it (its parameters applied) and its radii,
+    // without sweeping it; false when the item is not one or its directrix has fewer than two points.
+    bool GetSweptDiskAxis(uint32_t expressID, IfcCurve &directrix, double &radius, double &innerRadius);
     // True once COORDINATE_TO_ORIGIN has taken its offset (or when it is off).
     bool HasCoordination() const { return _isCoordinated || !_settings._coordinateToOrigin; }
     // How far a point may sit off a face's plane and still count as on it (the importer's setting).

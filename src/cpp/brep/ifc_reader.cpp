@@ -1361,7 +1361,7 @@ std::vector<P3> ellipseStations(const Placement4x4& m, double a, double b, doubl
   const P3 centre = {m[0][3], m[1][3], m[2][3]};
   const P3 ex = {m[0][0], m[1][0], m[2][0]};
   const P3 ey = {m[0][1], m[1][1], m[2][1]};
-  std::vector<P3> unit = arcStations({0, 0, 0}, {1, 0, 0}, {0, 1, 0}, 1, from, sweep);
+  std::vector<P3> unit = arcStations({0, 0, 0}, {1, 0, 0}, {0, 1, 0}, 1, from, sweep, jsMax(a, b));
   std::vector<P3> out;
   out.reserve(unit.size());
   for (const P3& cs : unit) {
@@ -2096,8 +2096,18 @@ Solid sweptFromItem(Model& api, const Entity& item, const Value& sweptArea, std:
     const P3 dirLocal = along && along->n >= 3 ? P3{along->v[0], along->v[1], along->v[2]} : P3{0, 0, 1};
 
     BuildReport revolveWhy;
-    GP solid = revolveProfile(placedRing(frame, outline.ring), place(frame, at), turn(frame, dirLocal), angle,
-                              facetsForSweep(angle), &revolveWhy);
+    // (As many facets as the corner farthest from the axis asks for; its holes the same.)
+    const std::vector<P3> turned = placedRing(frame, outline.ring);
+    const P3 spindleAt = place(frame, at), spindleDir = turn(frame, dirLocal);
+    double reach = 0;
+    const double dirLen = jsHypot3(spindleDir[0], spindleDir[1], spindleDir[2]);
+    for (const P3& p : turned) {
+      const P3 d = {p[0] - spindleAt[0], p[1] - spindleAt[1], p[2] - spindleAt[2]};
+      const P3 c = {d[1] * spindleDir[2] - d[2] * spindleDir[1], d[2] * spindleDir[0] - d[0] * spindleDir[2], d[0] * spindleDir[1] - d[1] * spindleDir[0]};
+      reach = std::fmax(reach, jsHypot3(c[0], c[1], c[2]) / dirLen);
+    }
+    const int32_t revolveFacets = facetsForSweep(angle, reach);
+    GP solid = revolveProfile(turned, spindleAt, spindleDir, angle, revolveFacets, &revolveWhy);
     if (!solid) return Decline{"solid: " + reasonOr(revolveWhy, "revolve produced no body")};
     if (!outline.holes.empty()) {
       const P3 origin = place(frame, at);
@@ -2109,7 +2119,7 @@ Solid sweptFromItem(Model& api, const Entity& item, const Value& sweptArea, std:
         std::vector<P3> ring;
         for (const P3& p : hole) ring.push_back(rotateAbout(place(frame, p), origin, axis, -over));
         BuildReport holeWhy;
-        GP cutter = revolveProfile(ring, origin, axis, angle + 2 * over, facetsForSweep(angle), &holeWhy);
+        GP cutter = revolveProfile(ring, origin, axis, angle + 2 * over, revolveFacets, &holeWhy);
         if (!cutter) return Decline{"solid: revolved void: " + reasonOr(holeWhy, "revolve produced no body")};
         cutters.push_back(std::move(cutter));
       }
@@ -2491,6 +2501,23 @@ Bounded boundedHalfSpaceTool(Model& api, const Value& ref, const Placement4x4& i
     for (int32_t v = 0; v < subject.cornerTally() && all; v++) {
       const P3 local = place(inverse, {subject.pointXOf(v), subject.pointYOf(v), subject.pointZOf(v)});
       all = inside(local[0], local[1]) || nearEdge(local[0], local[1]);
+    }
+    // (Every corner inside a boundary that turns back on itself is not the whole subject inside it: a notch of the boundary may go into
+    // it between two corners. Walls over a plinth, cut by the half space less a strip 15 mm deep: the strip went too.)
+    if (all) {
+      double lo[2] = {std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()}, hi[2] = {-lo[0], -lo[1]};
+      for (int32_t v = 0; v < subject.cornerTally(); v++) {
+        const P3 p = place(inverse, {subject.pointXOf(v), subject.pointYOf(v), subject.pointZOf(v)});
+        for (int k = 0; k < 2; k++) { lo[k] = jsMin(lo[k], p[k]); hi[k] = jsMax(hi[k], p[k]); }
+      }
+      double area = 0;
+      for (size_t i = 0, j = pts.size() - 1; i < pts.size(); j = i++) area += pts[j][0] * pts[i][1] - pts[i][0] * pts[j][1];
+      for (size_t i = 0; i < pts.size() && all; i++) {
+        const P3 &p = pts[(i + pts.size() - 1) % pts.size()], &q = pts[i], &r = pts[(i + 1) % pts.size()];
+        const double cross = (q[0] - p[0]) * (r[1] - q[1]) - (q[1] - p[1]) * (r[0] - q[0]);
+        const bool reflex = cross * area < 0 && std::fabs(cross) > tol * tol;
+        if (reflex && q[0] > lo[0] + tol && q[0] < hi[0] - tol && q[1] > lo[1] + tol && q[1] < hi[1] - tol) all = false;
+      }
     }
     if (all && wholeAllowed) return BoundedTool{nullptr, true};
     const size_t n = pts.size();
@@ -3002,7 +3029,7 @@ Solid buildAnySolid(Model& api, uint32_t itemIdent, const Placement4x4& into, co
     const Placement4x4 frame = compose(into, axisFrame(api, item->get("Position")));
     const std::vector<P3> half = placedRing(frame, arcStations({0, 0, 0}, {0, 0, -1}, {1, 0, 0}, r, 0, PI));
     BuildReport why;
-    GP ball = revolveProfile(half, place(frame, {0, 0, 0}), turn(frame, {0, 0, 1}), 2 * PI, facetsForSweep(2 * PI), &why);
+    GP ball = revolveProfile(half, place(frame, {0, 0, 0}), turn(frame, {0, 0, 1}), 2 * PI, facetsForSweep(2 * PI, r), &why);
     if (!ball) return Decline{"solid: sphere: " + reasonOr(why, "revolve produced no body")};
     return ball;
   }
@@ -3207,6 +3234,48 @@ bool hasWarpedFacet(const G& g) {
   return false;
 }
 
+// Openings: host -> opening elements, from IfcRelVoidsElement, then handed down the aggregation
+// (IfcRelAggregates): the parts a host is made of (wall layers as IfcBuildingElementPart) are cut by the
+// host's openings, as web-ifc does (IfcCache::PopulateRelAggregatesMap). A part keeps its own openings
+// and adds its parent's, until nothing changes: nested aggregates come in any order.
+std::unordered_map<uint32_t, std::vector<uint32_t>> openingsByHost(Model& model) {
+  std::unordered_map<uint32_t, std::vector<uint32_t>> voidsOf;
+  for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELVOIDSELEMENT)) {
+    const Entity* rel = line(model, rid);
+    const uint32_t host = asHandle(get(rel, "RelatingBuildingElement"));
+    const uint32_t hole = asHandle(get(rel, "RelatedOpeningElement"));
+    if (host && hole) voidsOf[host].push_back(hole);
+  }
+  if (voidsOf.empty()) return voidsOf;
+  std::vector<std::pair<uint32_t, std::vector<uint32_t>>> parts;
+  for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELAGGREGATES)) {
+    const Entity* rel = line(model, rid);
+    const uint32_t whole = asHandle(get(rel, "RelatingObject"));
+    if (!whole) continue;
+    std::vector<uint32_t> members;
+    for (const Value& v : itemsOf(get(rel, "RelatedObjects")))
+      if (const uint32_t m = asHandle(v)) members.push_back(m);
+    if (!members.empty()) parts.emplace_back(whole, std::move(members));
+  }
+  for (bool changed = true; changed;) {
+    changed = false;
+    for (const auto& [whole, members] : parts) {
+      auto found = voidsOf.find(whole);
+      if (found == voidsOf.end() || found->second.empty()) continue;
+      const std::vector<uint32_t> holes = found->second;  // copied: inserting below may rehash
+      for (uint32_t m : members) {
+        std::vector<uint32_t>& own = voidsOf[m];
+        for (uint32_t h : holes)
+          if (std::find(own.begin(), own.end(), h) == own.end()) {
+            own.push_back(h);
+            changed = true;
+          }
+      }
+    }
+  }
+  return voidsOf;
+}
+
 }  // namespace
 
 PassB runB(Model& model, webifc::geometry::IfcGeometryProcessor& gp, const std::vector<uint32_t>& products,
@@ -3229,20 +3298,14 @@ PassB runB(Model& model, webifc::geometry::IfcGeometryProcessor& gp, const std::
   const LengthScale unit = unitLengthFactor(model);
   const double scale = unit.scale;
   setWeldTolerance(WELD_METRES / scale);
+  setArcSagitta(ARC_SAGITTA_METRES / scale);
   const AngleScale angle = readPlaneAngleScale(model);
   const MakeSettings ctx{angle.scale};
   pass.lengthScale = scale;
   pass.angleScale = angle.scale;
 
-  // Openings: host -> opening elements.
-  std::unordered_map<uint32_t, std::vector<uint32_t>> voidsOf;
-  for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELVOIDSELEMENT)) {
-    const Entity* rel = line(model, rid);
-    const uint32_t host = asHandle(get(rel, "RelatingBuildingElement"));
-    const uint32_t hole = asHandle(get(rel, "RelatedOpeningElement"));
-    if (!host || !hole) continue;
-    voidsOf[host].push_back(hole);
-  }
+  // Openings: host -> opening elements, handed down to the host's parts.
+  std::unordered_map<uint32_t, std::vector<uint32_t>> voidsOf = openingsByHost(model);
   pass.setupMs = ms(t0);
 
   auto openingsFor = [&](uint32_t hostID) {
@@ -3609,13 +3672,9 @@ struct BrepEngine::Impl {
       : model(l, s), gp(p) {
     const LengthScale unit = unitLengthFactor(model);
     setWeldTolerance(WELD_METRES / unit.scale);
+    setArcSagitta(ARC_SAGITTA_METRES / unit.scale);
     ctx = MakeSettings{readPlaneAngleScale(model).scale};
-    for (uint32_t rid : model.idsWithType(webifc::schema::IFCRELVOIDSELEMENT)) {
-      const Entity* rel = line(model, rid);
-      const uint32_t host = asHandle(get(rel, "RelatingBuildingElement"));
-      const uint32_t hole = asHandle(get(rel, "RelatedOpeningElement"));
-      if (host && hole) voidsOf[host].push_back(hole);
-    }
+    voidsOf = openingsByHost(model);
   }
 
   std::vector<Opening> openingsFor(uint32_t hostID) {

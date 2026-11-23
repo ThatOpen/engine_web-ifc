@@ -284,6 +284,83 @@ void StreamAllBrepMeshes(uint32_t modelID, emscripten::val callback)
 }
 #endif
 
+// The swept disks of a product (reinforcing bars) without meshing them. Per IfcSweptDiskSolid item: its id,
+// colour and flatTransformation exactly as GetFlatMesh / StreamMeshes give them, the directrix the sweep
+// would follow as points (xyz, in the item's frame like GetSweptDiskSolid().axis) and the radius. The
+// items are passed to the geometry processor as skipped, so no tube is built and nothing stays cached.
+struct SweptDiskSkip
+{
+    const webifc::parsing::IfcLoader *loader = nullptr;
+    std::unordered_map<uint32_t, glm::dvec3> items;  // id -> first point of the directrix (for coordination)
+    bool firstPoints = false;
+};
+static std::unordered_map<uint32_t, SweptDiskSkip> sweptDiskSkips;
+
+emscripten::val GetSweptDiskAxes(uint32_t modelID, uint32_t productID)
+{
+    emscripten::val list = emscripten::val::array();
+    if (!manager.IsModelOpen(modelID))
+        return list;
+    auto loader = manager.GetIfcLoader(modelID);
+    auto gp = manager.GetGeometryProcessor(modelID);
+    SweptDiskSkip &skip = sweptDiskSkips[modelID];
+    if (skip.loader != loader)
+    {
+        // a model id is reused after CloseModel: the list belongs to the loader it was made from
+        skip = SweptDiskSkip{};
+        skip.loader = loader;
+        for (uint32_t id : loader->GetExpressIDsWithType(webifc::schema::IFCSWEPTDISKSOLID))
+            skip.items.emplace(id, glm::dvec3(0));
+    }
+    // Before COORDINATE_TO_ORIGIN has its offset, a skipped item met first gives it from its first point.
+    if (!skip.firstPoints && !gp->HasCoordination())
+    {
+        for (auto &[id, first] : skip.items)
+        {
+            webifc::geometry::IfcCurve axis;
+            double r = 0, ir = 0;
+            if (gp->GetSweptDiskAxis(id, axis, r, ir)) first = axis.points.front();
+        }
+        skip.firstPoints = true;
+    }
+    gp->SetSkippedItems(&skip.items, false);
+    webifc::geometry::IfcFlatMesh mesh = gp->GetFlatMesh(productID, true);
+    gp->SetSkippedItems(nullptr, false);
+    static const emscripten::val Float64Array = emscripten::val::global("Float64Array");
+    for (auto &g : mesh.geometries)
+    {
+        if (!skip.items.count(g.geometryExpressID))
+            continue;
+        webifc::geometry::IfcCurve axis;
+        double radius = 0, innerRadius = 0;
+        if (!gp->GetSweptDiskAxis(g.geometryExpressID, axis, radius, innerRadius))
+            continue;
+        std::vector<double> points;
+        points.reserve(axis.points.size() * 3);
+        for (const auto &p : axis.points)
+        {
+            points.push_back(p.x);
+            points.push_back(p.y);
+            points.push_back(p.z);
+        }
+        emscripten::val color = emscripten::val::object();
+        color.set("x", g.color.x);
+        color.set("y", g.color.y);
+        color.set("z", g.color.z);
+        color.set("w", g.color.w);
+        emscripten::val o = emscripten::val::object();
+        o.set("geometryExpressID", g.geometryExpressID);
+        o.set("color", color);
+        o.set("flatTransformation", Float64Array.new_(emscripten::typed_memory_view(g.flatTransformation.size(), g.flatTransformation.data())));
+        o.set("points", Float64Array.new_(emscripten::typed_memory_view(points.size(), points.data())));
+        o.set("radius", radius);
+        o.set("innerRadius", innerRadius);
+        list.call<void>("push", o);
+    }
+    gp->Clear(true);
+    return list;
+}
+
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
@@ -1461,6 +1538,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("StreamAllBrepMeshes", &StreamAllBrepMeshes);
     emscripten::function("SetBrepBooleansOnly", &SetBrepBooleansOnly);
 #endif
+    emscripten::function("GetSweptDiskAxes", &GetSweptDiskAxes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("GetLines", &GetLines);

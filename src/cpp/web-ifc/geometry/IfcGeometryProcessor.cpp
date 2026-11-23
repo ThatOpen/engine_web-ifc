@@ -300,6 +300,37 @@ namespace webifc::geometry
         _skipVoids = skipVoids;
     }
 
+    bool IfcGeometryProcessor::GetSweptDiskAxis(uint32_t expressID, IfcCurve &directrix, double &radius, double &innerRadius)
+    {
+        if (!_loader.IsValidExpressID(expressID) || _loader.GetLineType(expressID) != schema::IFCSWEPTDISKSOLID) return false;
+        _loader.MoveToArgumentOffset(expressID, 0);
+        auto directrixRef = _loader.GetRefArgument();
+
+        radius = _loader.GetDoubleArgument();
+        innerRadius = 0.0;
+
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+        {
+            _loader.StepBack();
+            innerRadius = _loader.GetDoubleArgument();
+        }
+
+        std::optional<double> startParam, endParam;
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+        {
+            _loader.StepBack();
+            startParam = _loader.GetDoubleArgument();
+        }
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+        {
+            _loader.StepBack();
+            endParam = _loader.GetDoubleArgument();
+        }
+
+        directrix = _geometryLoader.GetCurveWithParameters(directrixRef, 3, startParam, endParam);
+        return directrix.points.size() >= 2;
+    }
+
     IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
     {
         const auto lineType = _loader.GetLineType(expressID);
@@ -1385,32 +1416,10 @@ namespace webifc::geometry
                 // TODO: prevent self intersections in Sweep function still not working properly
                 bool closed = false;
 
-                _loader.MoveToArgumentOffset(expressID, 0);
-                auto directrixRef = _loader.GetRefArgument();
-
-                double radius = _loader.GetDoubleArgument();
+                IfcCurve directrix;
+                double radius = 0.0;
                 double innerRadius = 0.0;
-
-                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-                {
-                    _loader.StepBack();
-                    innerRadius = _loader.GetDoubleArgument();
-                }
-
-                std::optional<double> startParam, endParam;
-                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-                {
-                    _loader.StepBack();
-                    startParam = _loader.GetDoubleArgument();
-                }
-                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-                {
-                    _loader.StepBack();
-                    endParam = _loader.GetDoubleArgument();
-                }
-
-                IfcCurve directrix = _geometryLoader.GetCurveWithParameters(directrixRef, 3, startParam, endParam);
-                if (directrix.points.size() < 2) return mesh;
+                if (!GetSweptDiskAxis(expressID, directrix, radius, innerRadius)) return mesh;
                 closed = directrix.points.size() > 2 && glm::distance(directrix.points.front(), directrix.points.back()) < EPS_SMALL;
 
                 IfcProfile profile;

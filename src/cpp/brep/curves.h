@@ -30,12 +30,21 @@ double jsMin(double a, double b);               // Math.min: NaN wins, -0 beats 
 // Facets per full turn; shared by every curve so one shape has one granularity.
 inline constexpr int32_t SIDES_PER_REVOLUTION = 12;
 
-// How many segments an arc of this sweep gets; always at least one.
-int32_t facetsForSweep(double sweep);
+// And more where that leaves the facets farther than this from the curve (metres): an arc of 85 degrees and 9 m of radius
+// was three straight sides, 27 cm off it. A radius under 0.29 m keeps the twelve. At most ARC_MOST_SIDES per full turn.
+inline constexpr double ARC_SAGITTA_METRES = 0.01;
+inline constexpr int32_t ARC_MOST_SIDES = 96;
 
-// Samples of a planar arc from `from` to `from + sweep`, endpoints included.
+// The sagitta in the file's unit, set per model; 0 (until set) keeps SIDES_PER_REVOLUTION at every radius.
+void setArcSagitta(double t);
+
+// How many segments an arc of this sweep, and of this radius in the file's unit, gets; always at least one.
+int32_t facetsForSweep(double sweep, double radius = 0);
+
+// Samples of a planar arc from `from` to `from + sweep`, endpoints included. `sized`, the radius its facets are counted for, when it
+// is not `radius` (an ellipse sampled on the unit circle).
 std::vector<P3> arcStations(const P3& centre, const P3& ex, const P3& ey, double radius,
-                            double from, double sweep);
+                            double from, double sweep, double sized = 0);
 
 // Return shape of circleByThreePoints.
 struct CircleByThreePointsResult {

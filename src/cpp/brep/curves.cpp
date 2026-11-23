@@ -512,21 +512,32 @@ inline double dot(const P3& a, const P3& b) { return a[0] * b[0] + a[1] * b[1] +
 inline double normSquared(const P3& a) { return dot(a, a); }
 inline double len(const P3& a) { return jsHypot3(a[0], a[1], a[2]); }
 
-// facetsForSweep as TS computes it, NaN included.
-inline double facetsForSweepD(double sweep) {
-  return jsMax(1, jsRound((SIDES_PER_REVOLUTION * std::fabs(sweep)) / (PI * 2)));
+// Per thread, as the weld tolerance: one model at a time.
+thread_local double arcSagitta = 0;
+
+// facetsForSweep as TS computes it, NaN included; more of them where the radius asks for it (ARC_SAGITTA_METRES).
+inline double facetsForSweepD(double sweep, double radius) {
+  const double sides = jsMax(1, jsRound((SIDES_PER_REVOLUTION * std::fabs(sweep)) / (PI * 2)));
+  if (!(arcSagitta > 0) || !std::isfinite(radius) || !std::isfinite(sweep) || !(radius > arcSagitta)) return sides;
+  const double step = 2 * std::acos(1 - arcSagitta / radius);
+  const double turns = std::fabs(sweep) / (PI * 2);
+  // (Less than 0.01 of a facet over a whole number of them is that number.)
+  const double fine = std::ceil(std::fabs(sweep) / step - 0.01);
+  return jsMax(sides, std::fmin(fine, std::ceil(ARC_MOST_SIDES * turns)));
 }
 
 }  // namespace
 
-int32_t facetsForSweep(double sweep) {
+void setArcSagitta(double t) { arcSagitta = t; }
+
+int32_t facetsForSweep(double sweep, double radius) {
   // A non-finite sweep is NaN/Infinity in TS; there is no int32 for it.
-  return static_cast<int32_t>(facetsForSweepD(sweep));
+  return static_cast<int32_t>(facetsForSweepD(sweep, radius));
 }
 
 std::vector<P3> arcStations(const P3& centre, const P3& ex, const P3& ey, double radius,
-                            double from, double sweep) {
-  const double steps = facetsForSweepD(sweep);
+                            double from, double sweep, double sized) {
+  const double steps = facetsForSweepD(sweep, sized > 0 ? sized : radius);
   std::vector<P3> out;
   if (steps >= 0 && steps < 1e9) out.reserve(static_cast<size_t>(steps) + 1);
   for (double i = 0; i <= steps; i++) {
