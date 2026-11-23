@@ -5,7 +5,7 @@ const path = require("node:path");
 const { IfcAPI, LogLevel, IFCREINFORCINGBAR } = require(process.env.WEB_IFC_API || "../../dist/web-ifc-api-node.js");
 
 // A 10 mm swept disk along an IfcCompositeCurve: a 1000 mm line, a 90 degree arc of radius 200 mm
-// and a 500 mm line, with DEGREE as plane angle unit (as Revit writes rebars). Its parameter range
+// and a 500 mm line, with DEGREE as plane angle unit (as some exporters write rebars). Its parameter range
 // is 1 + 90 + 1 = 92: each polyline edge counts one unit and a trimmed circle its angle.
 const fixtures = path.join(__dirname, "fixtures", "composite-curve-params");
 const radius = 0.01;
@@ -21,7 +21,7 @@ const cases = [
   ["indexed-polycurve-end-rounding.ifc", 1.5],
   ["polyline-partial.ifc", 0.5 + 0.25],
   // IfcIndexedPolyCurve with a 1000 mm line, a 180 degree arc of radius 200 mm and a 500 mm line.
-  // Revit writes EndParam 1 + 180 + 1 = 182, which is swept whole; 0..0.5 is half of the length.
+  // Such files write EndParam 1 + 180 + 1 = 182, which is swept whole; 0..0.5 is half of the length.
   ["indexed-polycurve-arc-full.ifc", 1.5 + 0.2 * Math.PI],
   ["indexed-polycurve-arc-half.ifc", (1.5 + 0.2 * Math.PI) / 2],
 ];

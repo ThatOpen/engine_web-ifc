@@ -1408,7 +1408,7 @@ namespace bimGeometry
 			double halfX = xdim / 2;
 			double halfY = ydim / 2;
 
-			// can't use glm::dvec3 - Sample3_ArchiCAD25 fails
+			// can't use glm::dvec3 - a sample model fails
 			glm::dvec2 bl = glm::dvec2(-halfX, -halfY);
 			glm::dvec2 br = glm::dvec2(halfX, -halfY);
 
@@ -1434,7 +1434,7 @@ namespace bimGeometry
 			double halfX = xdim / 2;
 			double halfY = ydim / 2;
 
-			// can't use glm::dvec3 - Sample3_ArchiCAD25 fails
+			// can't use glm::dvec3 - a sample model fails
 			glm::dvec2 bl = glm::dvec2(-halfX + radius, -halfY + radius);
 			glm::dvec2 br = glm::dvec2(halfX - radius, -halfY + radius);
 			glm::dvec2 tl = glm::dvec2(-halfX + radius, halfY - radius);
@@ -1766,7 +1766,7 @@ namespace bimGeometry
 	{
 		double halfX = bottomXDim / 2;
 		double halfY = yDim / 2;
-		// can't use glm::dvec3 - Sample3_ArchiCAD25 fails
+		// can't use glm::dvec3 - a sample model fails
 		glm::dvec2 bl = placement * glm::dvec4(-halfX, -halfY, 0, 1);
 		glm::dvec2 br = placement * glm::dvec4(halfX, -halfY, 0, 1);
 

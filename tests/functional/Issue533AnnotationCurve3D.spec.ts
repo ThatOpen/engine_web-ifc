@@ -14,7 +14,7 @@ beforeAll(async () => {
 
 // Regression for https://github.com/ThatOpen/engine_web-ifc/issues/533.
 // The fixture is an IFC4X3 model exporting 3D annotation geometry the way
-// Bentley/infrastructure tools do: an IfcShapeRepresentation('Body', 'Curve3D')
+// infrastructure tools do: an IfcShapeRepresentation('Body', 'Curve3D')
 // of an IfcAnnotation holding an IfcIndexedPolyCurve over an
 // IfcCartesianPointList3D (with and without explicit IfcLineIndex segments),
 // plus direct IfcCartesianPoint/IfcCartesianPointList3D representation items.

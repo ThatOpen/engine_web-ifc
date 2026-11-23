@@ -23,16 +23,11 @@ body:
       description: What version of web-ifc are you running?
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: browsers
     attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
+      label: Where are you seeing the problem?
+      description: Browser and version, or Node.js version.
   - type: textarea
     id: logs
     attributes:
