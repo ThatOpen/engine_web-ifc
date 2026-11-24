@@ -1,5 +1,5 @@
 #pragma once
-// A tiny sampling profiler for Windows x64: a thread suspends the target thread every millisecond,
+// A tiny sampling profiler for the native x64 desktop build: a thread suspends the target thread every millisecond,
 // unwinds its stack with the SEH tables and records the return addresses relative to the image
 // base. stop() writes one sample per line ("rva rva rva ...", innermost first) for a symbolizer.
 
