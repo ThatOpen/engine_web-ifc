@@ -2921,7 +2921,10 @@ Solid buildAnySolid(Model& api, uint32_t itemIdent, const Placement4x4& into, co
     std::unordered_set<uint32_t> bounded;
     std::optional<uint32_t> seedHandle;
     const Entity* walk = item;
-    for (int step = 0; step <= 512 && walk; step++) {
+    // (Walked, not recursed: a slab with 1175 holes, each one more IfcBooleanResult around the last, passed the 512 the recursion
+    // allows and fell back whole. Only a chain that comes back on itself stops it.)
+    std::unordered_set<const Entity*> walked;
+    for (; walk && walked.insert(walk).second;) {
       const std::string wop = upper(walk->get("Operator").text());
       const uint32_t secondRef = asHandle(walk->get("SecondOperand"));
       const std::string_view otherKind = ifcKindOf(line(api, secondRef));
