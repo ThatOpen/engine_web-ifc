@@ -45,18 +45,7 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/generator@^7.27.5", "@babel/generator@^7.29.13":
-  version "7.29.14"
-  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.29.14.tgz"
-  integrity sha512-qSY56jgW5JnSXzuekLVil6zaOQxOCtOHidr65KkaMBw772IuAY28Qx4ZykAcDn8+FRF15qk80XzKwgSc/RYW6g==
-  dependencies:
-    "@babel/parser" "^7.29.14"
-    "@babel/types" "^7.29.14"
-    "@jridgewell/gen-mapping" "^0.3.12"
-    "@jridgewell/trace-mapping" "^0.3.28"
-    jsesc "^3.0.2"
-
-"@babel/generator@^7.29.15":
+"@babel/generator@^7.27.5", "@babel/generator@^7.29.13", "@babel/generator@^7.29.15":
   version "7.29.15"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.29.15.tgz#ffa72ac239f0ccf1b755f00fccdcb20cd2e627c4"
   integrity sha512-gNWJUX0FlevflramOkaInywOMhU1lkln38gAC7TFZv2tsWbLYbN/2WZFGcq8zbX0Z55e4vGa27IB/NaeZoauWQ==
@@ -128,7 +117,7 @@
     "@babel/template" "^7.29.7"
     "@babel/types" "^7.29.15"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.29.13", "@babel/parser@^7.29.14", "@babel/parser@^7.29.15", "@babel/parser@^7.29.7":
+"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.29.13", "@babel/parser@^7.29.15", "@babel/parser@^7.29.7":
   version "7.29.15"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.29.15.tgz#2e2bcf6e51bfc99e1a00417f0a122ba27a441dba"
   integrity sha512-RpKWyisHoP81twtSCgmE02iU0RnPcq1DN5bBEbpUePrjA9Q3wXhufnCJrrayPpoZieqFh3zyZQqwtSK0gGccRA==
@@ -276,7 +265,7 @@
     "@babel/types" "^7.29.15"
     debug "^4.3.1"
 
-"@babel/types@^7.0.0", "@babel/types@^7.20.7", "@babel/types@^7.27.3", "@babel/types@^7.28.2", "@babel/types@^7.29.11", "@babel/types@^7.29.14", "@babel/types@^7.29.15", "@babel/types@^7.29.7":
+"@babel/types@^7.0.0", "@babel/types@^7.20.7", "@babel/types@^7.27.3", "@babel/types@^7.28.2", "@babel/types@^7.29.11", "@babel/types@^7.29.15", "@babel/types@^7.29.7":
   version "7.29.15"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.29.15.tgz#92f0fa3501405b132ac7a5acd064052e8a455f09"
   integrity sha512-/XKpKDakL//LZ66bq1XsZOswuqeI5MZqPLDu18o3XdkU1fNJ7bdPtzgnc4ZNS+bBGHV0FJG8jjb8SwcC3nNVQQ==
