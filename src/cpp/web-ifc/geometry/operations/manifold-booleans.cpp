@@ -4,7 +4,9 @@
 
 #include "manifold-booleans.h"
 
+#include <algorithm>
 #include <array>
+#include <cmath>
 #include <limits>
 #include <map>
 #include <numeric>
@@ -229,36 +231,248 @@ namespace
             return manifold::Manifold(manifold::MeshGL64{});
         return solid;
     }
+
+    glm::dvec3 Position(const manifold::MeshGL64 &mesh, size_t vertex)
+    {
+        const auto p = mesh.numProp*vertex;
+        return glm::dvec3(mesh.vertProperties[p], mesh.vertProperties[p+1], mesh.vertProperties[p+2]);
+    }
+
+    // Two faces of a closed result that face away from each other and overlap
+    // within `thickness` form a zero-volume sheet: material left between nearly
+    // coincident faces of the operands, or a crack between nearly touching parts.
+    // Simplify keeps such a sheet, because removing it changes the topology.
+    // Returns the area of all sheets.
+    double SheetArea(const manifold::MeshGL64 &mesh, double thickness)
+    {
+        constexpr double maxAngle = 1e-3;
+        struct Face { glm::dvec3 a, b, c, normal, lo, hi; double offset; };
+        // A face goes to one of two lists by the side of a fixed direction its
+        // normal points to; a face almost square to it goes to both. Only faces
+        // of different lists can face away from each other.
+        const auto reference = glm::normalize(glm::dvec3(0.3, 0.5, 0.8));
+        std::array<std::vector<Face>, 2> sides;
+        glm::dvec3 lo(std::numeric_limits<double>::max()), hi(-std::numeric_limits<double>::max());
+        for (size_t i = 0; i < mesh.NumVert(); ++i)
+        {
+            lo = glm::min(lo, Position(mesh, i));
+            hi = glm::max(hi, Position(mesh, i));
+        }
+        const auto middle = (lo+hi)/2.0;
+        for (size_t i = 0; i < mesh.triVerts.size(); i += 3)
+        {
+            Face face{Position(mesh, mesh.triVerts[i]), Position(mesh, mesh.triVerts[i+1]),
+                Position(mesh, mesh.triVerts[i+2]), {}, {}, {}, 0};
+            const auto normal = glm::cross(face.b-face.a, face.c-face.a);
+            const double length = glm::length(normal);
+            if (!(length > 0)) continue;
+            face.normal = normal/length;
+            face.lo = glm::min(face.a, glm::min(face.b, face.c));
+            face.hi = glm::max(face.a, glm::max(face.b, face.c));
+            const auto centre = (face.a+face.b+face.c)/3.0-middle;
+            const double side = glm::dot(face.normal, reference);
+            for (int s = 0; s < 2; ++s)
+            {
+                const double sign = s == 0 ? 1 : -1;
+                if (sign*side < -2*maxAngle) continue;
+                face.offset = sign*glm::dot(face.normal, centre);
+                sides[s].push_back(face);
+            }
+        }
+        if (sides[0].empty() || sides[1].empty()) return 0;
+        // Faces that overlap and are tilted by at most maxAngle have centres
+        // whose offsets differ by at most this much.
+        const double window = thickness+4*maxAngle*glm::length(hi-lo);
+        const auto byOffset = [](const Face &x, const Face &y) { return x.offset < y.offset; };
+        std::sort(sides[1].begin(), sides[1].end(), byOffset);
+        const double minDot = -std::cos(maxAngle);
+        double area = 0;
+        for (const auto &f : sides[0])
+        {
+            Face key = f;
+            key.offset = f.offset-window;
+            for (auto it = std::lower_bound(sides[1].begin(), sides[1].end(), key, byOffset);
+                 it != sides[1].end() && it->offset <= f.offset+window; ++it)
+            {
+                const auto &g = *it;
+                if (glm::dot(f.normal, g.normal) > minDot) continue;
+                if (glm::any(glm::greaterThan(f.lo, g.hi+thickness)) || glm::any(glm::greaterThan(g.lo, f.hi+thickness))) continue;
+                // Clip f by g in f's plane. g faces the other way, so its
+                // projection is reversed to keep both counterclockwise.
+                const auto u = glm::normalize(f.b-f.a), v = glm::cross(f.normal, u);
+                const auto planar = [&](const glm::dvec3 &p) { return glm::dvec2(glm::dot(p-f.a, u), glm::dot(p-f.a, v)); };
+                std::vector<glm::dvec2> polygon = {planar(f.a), planar(f.b), planar(f.c)};
+                const std::array<glm::dvec2, 3> clip = {planar(g.a), planar(g.c), planar(g.b)};
+                for (int k = 0; k < 3 && polygon.size() >= 3; ++k)
+                {
+                    const auto p0 = clip[k], d = clip[(k+1)%3]-p0;
+                    const auto inside = [&](const glm::dvec2 &p) { return d.x*(p.y-p0.y)-d.y*(p.x-p0.x); };
+                    std::vector<glm::dvec2> kept;
+                    for (size_t j = 0; j < polygon.size(); ++j)
+                    {
+                        const auto p = polygon[j], q = polygon[(j+1)%polygon.size()];
+                        const double sp = inside(p), sq = inside(q);
+                        if (sp >= 0) kept.push_back(p);
+                        if ((sp >= 0) != (sq >= 0)) kept.push_back(p+(q-p)*(sp/(sp-sq)));
+                    }
+                    polygon = std::move(kept);
+                }
+                if (polygon.size() < 3) continue;
+                double overlap = 0;
+                bool thin = true;
+                for (size_t j = 0; j < polygon.size(); ++j)
+                {
+                    const auto p = polygon[j], q = polygon[(j+1)%polygon.size()];
+                    overlap += (p.x*q.y-p.y*q.x)/2;
+                    thin = thin && std::abs(glm::dot(g.normal, f.a+p.x*u+p.y*v-g.a)) <= thickness;
+                }
+                if (thin) area += std::abs(overlap);
+            }
+        }
+        return area;
+    }
+
+    // Moves every face of a closed solid outwards by `distance`. The faces at a
+    // vertex are grouped by plane, and the vertex moves so that each group moves
+    // by at least the distance. At a sharp corner, which would need a long
+    // spike for that, the vertex moves no more than four times the distance.
+    manifold::Manifold Grow(const manifold::Manifold &solid, double distance)
+    {
+        constexpr double maxAngle = 1e-2, maxStep = 4;
+        auto mesh = solid.GetMeshGL64();
+        const size_t count = mesh.NumVert();
+        std::vector<size_t> root(count);
+        std::iota(root.begin(), root.end(), 0);
+        for (size_t i = 0; i < mesh.mergeFromVert.size(); ++i) root[mesh.mergeFromVert[i]] = mesh.mergeToVert[i];
+        std::vector<std::vector<glm::dvec3>> planes(count);
+        for (size_t i = 0; i < mesh.triVerts.size(); i += 3)
+        {
+            const auto a = Position(mesh, mesh.triVerts[i]), b = Position(mesh, mesh.triVerts[i+1]), c = Position(mesh, mesh.triVerts[i+2]);
+            const auto normal = glm::cross(b-a, c-a);
+            const double length = glm::length(normal);
+            if (!(length > 0)) continue;
+            for (int k = 0; k < 3; ++k)
+            {
+                auto &group = planes[root[mesh.triVerts[i+k]]];
+                const auto found = std::find_if(group.begin(), group.end(), [&](const glm::dvec3 &n)
+                { return glm::dot(n, normal/length) >= std::cos(maxAngle)*glm::length(n); });
+                if (found == group.end()) group.push_back(normal/length);
+                else *found += normal/length;
+            }
+        }
+        std::vector<glm::dvec3> moved(count);
+        for (size_t i = 0; i < count; ++i)
+        {
+            if (root[i] != i) continue;
+            auto &group = planes[i];
+            if (group.empty()) return manifold::Manifold();
+            glm::dvec3 step(0);
+            for (auto &n : group) { n = glm::normalize(n); step += n; }
+            step = glm::length(step) > 1e-6 ? glm::normalize(step) : group.front();
+            // Project onto each constraint dot(n, step) >= 1 in turn.
+            double violation = 1;
+            for (int iteration = 0; iteration < 64 && violation > 1e-9 && glm::length(step) <= maxStep; ++iteration)
+            {
+                violation = 0;
+                for (const auto &n : group)
+                {
+                    const double missing = 1-glm::dot(n, step);
+                    if (missing <= 0) continue;
+                    step += missing*n;
+                    violation = std::max(violation, missing);
+                }
+            }
+            if (glm::length(step) > maxStep) step *= maxStep/glm::length(step);
+            if (!std::isfinite(glm::length(step))) return manifold::Manifold();
+            moved[i] = Position(mesh, i)+distance*step;
+        }
+        for (size_t i = 0; i < count; ++i)
+        {
+            const auto p = moved[root[i]];
+            for (int k = 0; k < 3; ++k) mesh.vertProperties[mesh.numProp*i+k] = p[k];
+        }
+        return manifold::Manifold(mesh);
+    }
 }
 
     bool TryManifoldBoolean(const IfcGeometry &first, const std::vector<IfcGeometry> &cutters,
-        const std::string &operation, IfcGeometry &result, double tolerance)
+        const std::string &operation, IfcGeometry &result, double tolerance, double sheetThickness)
     {
         try
         {
             if (first.halfSpace || first.numFaces == 0 || cutters.empty()) return false;
             if (!std::isfinite(tolerance) || tolerance < 0) return false;
+            if (!std::isfinite(sheetThickness) || sheetThickness < 0) return false;
             if (operation != "DIFFERENCE" && operation != "UNION") return false;
             for (const auto &cutter : cutters) if (cutter.halfSpace || cutter.numFaces == 0) return false;
-            auto solid = ImportSolid(first, tolerance);
-            if (solid.Status() != manifold::Manifold::Error::NoError || solid.IsEmpty()) return false;
+            const auto base = ImportSolid(first, tolerance);
+            if (base.Status() != manifold::Manifold::Error::NoError || base.IsEmpty()) return false;
+            std::vector<manifold::Manifold> operands;
             for (const auto &cutter : cutters)
             {
-                auto operand = ImportSolid(cutter, tolerance);
+                operands.push_back(ImportSolid(cutter, tolerance));
+                const auto &operand = operands.back();
                 if (operand.Status() != manifold::Manifold::Error::NoError || operand.IsEmpty())
                 {
                     spdlog::debug("[Manifold] Operand cannot represent a closed oriented solid (status={})", static_cast<int>(operand.Status()));
                     return false;
                 }
-                solid = operation == "DIFFERENCE" ? solid-operand : solid+operand;
-                if (solid.Status() != manifold::Manifold::Error::NoError) return false;
             }
-            // Regularize the result at the model's geometric precision. In particular,
-            // coincident IFC faces can otherwise leave closed, zero-volume sheets.
-            // This preserves manifold topology and uses a distance tolerance, without
-            // rejecting faces according to their aspect ratio or tessellation density.
-            solid = solid.AsOriginal().Simplify(tolerance);
-            if (solid.Status() != manifold::Manifold::Error::NoError) return false;
+            const auto apply = [&](const std::vector<manifold::Manifold> &tools, manifold::Manifold &solid)
+            {
+                solid = base;
+                for (const auto &tool : tools)
+                {
+                    solid = operation == "DIFFERENCE" ? solid-tool : solid+tool;
+                    if (solid.Status() != manifold::Manifold::Error::NoError) return false;
+                }
+                // Regularize the result at the model's geometric precision. This
+                // preserves manifold topology and uses a distance tolerance, without
+                // rejecting faces according to their aspect ratio or tessellation density.
+                solid = solid.AsOriginal().Simplify(tolerance);
+                return solid.Status() == manifold::Manifold::Error::NoError;
+            };
+            manifold::Manifold solid;
+            if (!apply(operands, solid)) return false;
+            // Faces of the operands that should coincide often miss each other by
+            // more than the precision, which leaves a closed, zero-volume sheet.
+            // Grow the operands by the sheet thickness so that such faces overlap.
+            // Their faces then move by that distance, so this runs only when needed.
+            // Sheets the first operand already has, such as the faces where two of
+            // its parts touch, are not created by the Boolean and are kept.
+            const double visible = 1e4*sheetThickness*sheetThickness;
+            double inherited = -1;
+            const auto createsSheet = [&](const manifold::Manifold &candidate)
+            {
+                const double area = SheetArea(candidate.GetMeshGL64(), sheetThickness);
+                if (area <= visible) return false;
+                if (inherited < 0) inherited = SheetArea(base.GetMeshGL64(), sheetThickness);
+                return area > inherited+visible;
+            };
+            if (sheetThickness > 0 && createsSheet(solid))
+            {
+                double area = solid.SurfaceArea();
+                std::vector<manifold::Manifold> grown;
+                for (const auto &operand : operands)
+                {
+                    grown.push_back(Grow(operand, sheetThickness));
+                    if (grown.back().Status() != manifold::Manifold::Error::NoError || grown.back().IsEmpty())
+                    {
+                        spdlog::debug("[Manifold] Result has a zero-volume sheet; an operand cannot be grown");
+                        return false;
+                    }
+                    area += operand.SurfaceArea();
+                }
+                manifold::Manifold regular;
+                if (!apply(grown, regular) || createsSheet(regular) ||
+                    std::abs(regular.Volume()-solid.Volume()) > 2*sheetThickness*area)
+                {
+                    spdlog::debug("[Manifold] Result has a zero-volume sheet that growing the operands does not remove");
+                    return false;
+                }
+                spdlog::debug("[Manifold] Removed a zero-volume sheet by growing the operands by {}", sheetThickness);
+                solid = std::move(regular);
+            }
             const auto mesh = solid.GetMeshGL64();
             if (mesh.NumTri() > std::numeric_limits<uint32_t>::max()/3) return false;
             IfcGeometry output;

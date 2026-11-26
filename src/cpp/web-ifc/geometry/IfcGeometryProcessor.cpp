@@ -3001,8 +3001,12 @@ namespace webifc::geometry
                         cutter = std::move(snapped);
                 }
             }
+            // Zero-volume sheets thinner than the distance the reserve welds at
+            // (0.1 mm, see MorphNakedEdges) are removed, or the chain falls back.
+            const double sheetThickness = std::max(_settings.TOLERANCE_PLANE_DEVIATION,
+                1e-4 / (g_morphUnitToMetre > 0 ? g_morphUnitToMetre : 1.0));
             IfcGeometry solidResult;
-            if (!useHook && TryManifoldBoolean(firstGeom, preparedCutters, op, solidResult, _settings.TOLERANCE_PLANE_DEVIATION))
+            if (!useHook && TryManifoldBoolean(firstGeom, preparedCutters, op, solidResult, _settings.TOLERANCE_PLANE_DEVIATION, sheetThickness))
             {
                 if (firstGeoms.size() == 1) return solidResult;
                 finalResult.AddGeometry(solidResult);
